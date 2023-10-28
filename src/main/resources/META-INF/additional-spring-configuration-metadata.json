@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "justice.league",
+    "type": "java.lang.String",
+    "description": "Propriedade para acessar um arquivo externo da internet."
+  },
+  {
+    "name": "avengers",
+    "type": "java.lang.String",
+    "description": "Propriedade para acessar um arquivo externo da internet."
+  }
+]}
