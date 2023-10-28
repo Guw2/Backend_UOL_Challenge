@@ -1,7 +1,13 @@
 package com.lorian.uolchallenge.player;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.lorian.uolchallenge.exceptions.throwable.NoCodinomeLeftException;
+import com.lorian.uolchallenge.request.RequestHandler;
 
 @Service
 public class PlayerService {
@@ -9,14 +15,21 @@ public class PlayerService {
     @Autowired
     PlayerRepository repository;
 
-    public PlayerDTO createPlayer(PlayerDTO dto){
-        Player player = new Player(dto);
-        repository.save(player);
-        return entityToDto(player);
+    @Autowired
+    RequestHandler requestHandler;
+
+    public List<Player> findAllPlayers() {
+        return repository.findAll();
     }
 
-    private PlayerDTO entityToDto(Player entity){
-        return new PlayerDTO(entity.getName(), entity.getEmail(), entity.getPhone(), entity.getGroupType());
+    public Player createPlayer(PlayerDTO dto){
+        try{
+            Player player = new Player(dto);
+            player.setCodinome(requestHandler.findCodinome(dto.grouptype()));
+            repository.save(player);
+            return player;
+        }catch(NoSuchElementException e){
+            throw new NoCodinomeLeftException();
+        }
     }
-
 }
